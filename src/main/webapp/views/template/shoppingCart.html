@@ -17,6 +17,7 @@
                     <th class="text-right" translate>listProduct.amount</th>
                     <th class="text-right" translate>listProduct.netPrice</th>
                     <th class="text-right" translate>listProduct.price</th>
+                    <th class="text-right" translate>listProduct.remove</th>
 
 
 
@@ -29,6 +30,8 @@
                                placeholder="amount" name="productdescription" required/></td>
                     <td class="text-right">{{selectedProduct.product.netPrice | number:2}}</td>
                     <td class="text-right">{{totalEach($index) |number:2}}</td>
+                    <td class="text-right"><a><span ng-click="removeProduct(selectedProduct.product)">remove</span></a></td>
+
                 </tr>
                 <tr>
                     <th></th>
@@ -40,7 +43,8 @@
                 </tr>
             </table>
             <div class="panel-body text-center">
-                <a href ng:click="updateCart()" class="btn btn-primary ">update cart</a>
+                <a href ng:click="updateCart(cart)" class="btn btn-primary ">update cart</a>
+                <a href ng:click="saveCart(cart)" class="btn btn-primary ">save cart</a>
             </div>
         </div>
     </form>

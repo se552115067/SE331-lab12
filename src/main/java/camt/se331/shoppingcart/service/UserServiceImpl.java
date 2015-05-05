@@ -1,6 +1,8 @@
 package camt.se331.shoppingcart.service;
 
+import camt.se331.shoppingcart.entity.ShoppingCart;
 import camt.se331.shoppingcart.entity.User;
+import camt.se331.shoppingcart.repository.ShoppingCartRepository;
 import camt.se331.shoppingcart.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    ShoppingCartRepository shoppingCartRepository;
 
     @Override
     public List<User> findAll() {
@@ -36,5 +40,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String email, String password) {
         return null;
+    }
+
+    @Override
+    @Transactional
+    public ShoppingCart addShoppingCart(User user, ShoppingCart shoppingCart) {
+        User currentUser = userRepository.findOne(user.getId());
+        currentUser.getShoppingCarts().add(shoppingCart);
+        shoppingCart.setUser(currentUser);
+        shoppingCartRepository.save(shoppingCart);
+        return shoppingCart;
     }
 }

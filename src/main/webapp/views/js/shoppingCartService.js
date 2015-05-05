@@ -7,3 +7,29 @@ shoppingCartServices.factory('shoppingCartService',function($resource){
         }});
 
 })
+
+
+shoppingCartServices.factory('cartManagement',function($resource) {
+    return $resource('/shoppingcart/:action', {}, {
+        addToCart: {
+            method: 'POST',
+            params: {'action': 'addToCart'}
+        },
+        updateCart: {
+            method: 'POST',
+            params: {'action': 'updateCart'}
+        },
+        removeProduct: {
+            method: 'POST',
+            params: {'action': 'removeProduct'}
+        },
+        saveCart: {
+            method: 'POST',
+            params: {'action': 'saveCart'}
+        },
+        emptyCart: {
+            method: 'GET',
+            params: {'action': 'emptyCart'}
+        }
+})
+})

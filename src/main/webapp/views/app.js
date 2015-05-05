@@ -26,7 +26,7 @@ labApp.config(['$routeProvider',
           templateUrl: 'template/productList.html',
           controller: 'listProductController'
       }).
-      when('/shoppingCart/:id',{
+      when('/shoppingCart/',{
           templateUrl: 'template/shoppingCart.html',
           controller: 'showShoppingCartController'
       }).
@@ -103,7 +103,7 @@ labApp.config(['$locationProvider', '$httpProvider', function($locationProvider,
         }
     })
 
-}]).run(function($rootScope,$location,$cookieStore,UserService){
+}]).run(function($rootScope,$location,$cookieStore,UserService,cartManagement){
     $rootScope.$on('$viewContentLoaded',function(){
         delete $rootScope.error;
     });
@@ -120,11 +120,14 @@ labApp.config(['$locationProvider', '$httpProvider', function($locationProvider,
         return $rootScope.user.roles[role];
     }
 
-    $rootScope.logout = function(){
-        delete $rootScope.user;
-        delete $rootScope.authToken;
+    $rootScope.logout = function() {
+        cartManagement.emptyCart(function () {
+            delete $rootScope.user;
+            delete $rootScope.authToken;
+        });
+
         $cookieStore.remove('authToken');
-        $location.path("/listProduct")
+        $location.path("/listProduct");
     }
 
     /* Try getting valid user from cookie or go to login page */
@@ -133,7 +136,7 @@ labApp.config(['$locationProvider', '$httpProvider', function($locationProvider,
     var authToken = $cookieStore.get('authToken');
     if (authToken != undefined){
         $rootScope.authToken = authToken;
-        UserSerivce.get(function(user){
+        UserService.get(function(user){
             $rootScope.user = user;
             $location.path(originalPath);
         })

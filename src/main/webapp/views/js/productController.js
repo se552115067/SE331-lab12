@@ -1,7 +1,6 @@
 'use strict';
 
-var productMainController = angular.module('productMainController', ['productServices']);
-
+var productMainController = angular.module('productMainController', ['productServices','shoppingCartServices']);
 productMainController.controller('addProductController', ['$scope', '$http', '$location', '$rootScope','productService',
     function ($scope, $http, $location, $rootScope,productService) {
         $scope.product = {};
@@ -29,9 +28,9 @@ productMainController.controller('addProductController', ['$scope', '$http', '$l
 
     }]);
 
-productMainController.controller('listProductController', ['$scope', '$http', '$rootScope','productService','$route','totalCalService','queryProductService',
-    function ($scope, $http, $rootScope,productService,$route,totalCalService,queryProductService) {
-        //$http.get("/product/").success(function (data) {
+productMainController.controller('listProductController', ['$scope', '$http', '$rootScope','productService','$route','totalCalService','queryProductService','cartManagement','$location',
+    function ($scope, $http, $rootScope,productService,$route,totalCalService,queryProductService,cartManagement,$location) {
+    //$http.get("/product/").success(function (data) {
         var data = productService.query(function(){
            // $scope.totalNetPrice= totalCalService.getTotalNetPrice(data);
             $scope.products = data;
@@ -59,6 +58,20 @@ productMainController.controller('listProductController', ['$scope', '$http', '$
                 $scope.products = data;
             });
         }
+
+        $scope.addToCart = function(product){
+            product.images = null;
+            cartManagement.addToCart(product,function(shoppingCart){
+                            //success event
+                            $rootScope.shoppingCart = shoppingCart;
+                $location.path("shoppingCart")
+
+            },function(event){
+                                // fail event
+                                            })
+
+                    }
+
 
     }]);
 
